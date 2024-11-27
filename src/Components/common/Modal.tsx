@@ -5,7 +5,7 @@ const Modal: React.FC = () => {
   const { isModalOpen, modalContent, closeModal } = useModal();
 
   return (
-    !isModalOpen ? 
+    isModalOpen ? 
     <>
       <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
         <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-lg relative dark:bg-slate-800 dark:text-white">
