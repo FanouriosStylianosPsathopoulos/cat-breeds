@@ -3,6 +3,7 @@ import CarouselItem from "./CarouselItem";
 import { getData } from "../../axios/methods";
 import { Breed } from "../Features/MainPage/MainPageContainer";
 
+
 const preloadImage = (url) =>
     new Promise((resolve, reject) => {
         const img = new Image();
@@ -19,13 +20,15 @@ interface CarouselProps {
 }
 
 const Carousel: React.FC<CarouselProps> = ({ items, searchTerm }) => {
-    const visibleItemsCount = window.innerWidth < 640 ? 2 : 5; 
+    const visibleItemsCount = Math.min(window.innerWidth < 640 ? 2 : 5, items.length); 
 
     const [currentIndex, setCurrentIndex] = useState(0);
     
     const [loading,setLoading] = useState(true);    
     
     const [catState,setCatState] = useState([]);
+
+    console.log('currentIndex -visibleItemsCount  <= 0',currentIndex -visibleItemsCount  <= 0)
 
     const fetchAdditionalInfo = async (currentItems: Array<{ id: number; title: string }>) => {
         try {
@@ -40,7 +43,7 @@ const Carousel: React.FC<CarouselProps> = ({ items, searchTerm }) => {
             );
             return newInfo;
         } catch (error) {
-            console.error("Error fetching or preloading additional info:", error);
+            console.error("error", error);
         }
     };
 
@@ -73,9 +76,9 @@ const Carousel: React.FC<CarouselProps> = ({ items, searchTerm }) => {
     
     const handlePrev = async() => {
         setLoading(true);
-        const newIndex = currentIndex === 0 ? items.length - visibleItemsCount : currentIndex - visibleItemsCount;
+        const newIndex = currentIndex - visibleItemsCount;
         setCurrentIndex(newIndex);
-        const visibleItems = items.slice(newIndex, newIndex + visibleItemsCount);
+        const visibleItems = items.slice(newIndex, currentIndex);
         const newInfo = await fetchAdditionalInfo(visibleItems);
         setCatState(newInfo);
         setLoading(false);
@@ -83,9 +86,12 @@ const Carousel: React.FC<CarouselProps> = ({ items, searchTerm }) => {
 
     const handleNext = async () => {
         setLoading(true);
-        const newIndex = currentIndex + visibleItemsCount >= items.length ? 0 : currentIndex + visibleItemsCount;
+        const newIndex =  currentIndex + visibleItemsCount;
+        const endIndex = newIndex + visibleItemsCount  > items.length ? items.length  : newIndex + visibleItemsCount;
+        console.log('newIndex',newIndex,endIndex);
         setCurrentIndex(newIndex);
-        const visibleItems = items.slice(newIndex, newIndex + visibleItemsCount);
+        const visibleItems = items.slice(newIndex, endIndex);
+        console.log('visible items',visibleItems,items);
         const newInfo = await fetchAdditionalInfo(visibleItems);
         setCatState(newInfo);
         setLoading(false);
@@ -119,7 +125,7 @@ const Carousel: React.FC<CarouselProps> = ({ items, searchTerm }) => {
 
             <button
                 onClick={async () => await handlePrev()}
-                disabled = {loading}
+                disabled = {loading || currentIndex -visibleItemsCount  < 0 }
                 className="absolute top-1/2 left-[-20px] md:left-[-40px] transform -translate-y-1/2 bg-gray-700 text-white p-3 rounded-full shadow hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500"
             >
                 <svg
@@ -139,7 +145,7 @@ const Carousel: React.FC<CarouselProps> = ({ items, searchTerm }) => {
 
             <button
                 onClick={async () => await handleNext()}
-                disabled = {loading}
+                disabled = {loading || visibleItemsCount + currentIndex >= items.length}
                 className="absolute top-1/2 right-[-20px] md:right-[-40px] transform -translate-y-1/2 bg-gray-700 text-white p-3 rounded-full shadow hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500"
             >
                <svg
