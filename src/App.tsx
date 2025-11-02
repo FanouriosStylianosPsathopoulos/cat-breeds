@@ -1,20 +1,19 @@
-import './App.css'
-import Modal from './Components/common/Modal'
-import PageLayout from './Components/Layout/PageLayout'
-import HomePage from './Components/Features/MainPage/MainPageContainer'
-import { ModalProvider } from './context/ModalContext'
+import "./App.css";
+import Modal from "./Components/common/Modal";
+import PageLayout from "./Components/Layout/PageLayout";
+import HomePage from "./Components/Features/MainPage/MainPageContainer";
+import { ModalProvider } from "./context/ModalContext";
 
 const App = () => {
-
+  console.log("App rendered");
   return (
     <ModalProvider>
       <PageLayout>
-          <HomePage />
-          <Modal />
+        <HomePage />
+        <Modal />
       </PageLayout>
     </ModalProvider>
+  );
+};
 
-  )
-}
-
-export default App
+export default App;
