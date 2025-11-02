@@ -8,6 +8,7 @@ const App = () => {
   console.log("App Rendered");
   console.log("Another log for testing");
   console.log("dkok");
+  console.log("New log for verification");
   return (
     <ModalProvider>
       <PageLayout>
