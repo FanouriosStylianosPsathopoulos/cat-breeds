@@ -5,6 +5,7 @@ import HomePage from "./Components/Features/MainPage/MainPageContainer";
 import { ModalProvider } from "./context/ModalContext";
 
 const App = () => {
+  console.log("App Rendered");
   return (
     <ModalProvider>
       <PageLayout>
