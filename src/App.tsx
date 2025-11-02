@@ -6,6 +6,8 @@ import { ModalProvider } from "./context/ModalContext";
 
 const App = () => {
   console.log("App Rendered");
+  console.log("Another log for testing");
+  console.log("dkok");
   return (
     <ModalProvider>
       <PageLayout>
